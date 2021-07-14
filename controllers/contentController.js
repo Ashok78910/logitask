@@ -11,7 +11,7 @@ const getContent = asyncHandler(async(req,res) =>{
     res.json(contents)
 })
 
-//@desc fetch one onecontent
+//@desc fetch one content
 //@route GET /api/contents/:id
 //@access public
 
@@ -26,9 +26,9 @@ const getContentById = asyncHandler(async(req,res) =>{
 })
 
 
-//@desc create a product
-//@route POST /api/products
-//@access pivate/admin
+//@desc create a contents
+//@route POST /api/contents
+//@access pivate
 
 const createContent = asyncHandler(async (req, res) => {
     const data = req.body
@@ -38,10 +38,10 @@ const createContent = asyncHandler(async (req, res) => {
   })
 
 
-  // user : req.user._id,
-//@desc update a product
-//@route PUT /api/products/:id
-//@access pivate/admin
+  
+//@desc update a content
+//@route PUT /api/contents/:id
+//@access pivate
 
 const updateContent = asyncHandler(async (req, res) => {
     const { language,subject,chapter,topic,Class,title,image} =req.body
@@ -50,7 +50,7 @@ const updateContent = asyncHandler(async (req, res) => {
   
     if (content) {
      content.language = language
-     content.subject = Subject
+     content.subject = subject
      content.Class = Class
      content.topic = topic
      content.chapter=chapter,
@@ -66,9 +66,26 @@ const updateContent = asyncHandler(async (req, res) => {
     }
   })
 
+
+  //@desc delete a content
+//@route DELETE /api/content/:id
+//@access pivate
+
+const deleteContent = asyncHandler(async (req, res) => {
+  const content = await Content.findById(req.params.id)
+  if (content) {
+    await content.remove()
+    res.json({ message: 'Content removed' })
+  } else {
+    res.status(404)
+    throw new Error('Content not found')
+  }
+})
+
 module.exports = {
     getContent,
     getContentById,
     createContent,
-    updateContent
+    updateContent,
+    deleteContent
 }
